@@ -1,10 +1,9 @@
+import 'package:FlutterWeather/models/ForecastData.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:FlutterWeather/models/WeatherData.dart';
-
 class WeatherItem extends StatelessWidget {
-  final WeatherData weather;
+  final DailyForecastData weather;
 
   WeatherItem({Key key, @required this.weather}) : super(key: key);
 
@@ -16,12 +15,23 @@ class WeatherItem extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(weather.name, style: new TextStyle(color: Colors.black)),
-            Text(weather.main, style: new TextStyle(color: Colors.black, fontSize: 24.0)),
-            Text('${weather.temp.toString()}°F',  style: new TextStyle(color: Colors.black)),
-            Image.network('https://openweathermap.org/img/w/${weather.icon}.png'),
-            Text(new DateFormat.yMMMd().format(weather.date), style: new TextStyle(color: Colors.black)),
-            Text(new DateFormat.Hm().format(weather.date), style: new TextStyle(color: Colors.black)),
+            Text(DateFormat.E().format(weather.date),
+                style: TextStyle(color: Colors.black, fontSize: 24)),
+            Text(weather.main,
+                style: TextStyle(color: Colors.black, fontSize: 16)),
+            Container(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Spacer(flex: 4),
+                Text('${weather.tempH.round().toString()}°F',
+                    style: TextStyle(color: Colors.black, fontSize: 24)),
+                Spacer(flex: 1),
+                Text('${weather.tempL.round().toString()}°F',
+                    style: TextStyle(color: Colors.black, fontSize: 24)),
+                Spacer(flex: 4),
+              ],
+            ))
           ],
         ),
       ),

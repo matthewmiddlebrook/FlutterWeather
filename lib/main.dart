@@ -1,13 +1,14 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:location/location.dart';
-import 'package:flutter/services.dart';
 
+import 'package:FlutterWeather/models/ForecastData.dart';
+import 'package:FlutterWeather/models/WeatherData.dart';
 import 'package:FlutterWeather/widgets/Weather.dart';
 import 'package:FlutterWeather/widgets/WeatherItem.dart';
-import 'package:FlutterWeather/models/WeatherData.dart';
-import 'package:FlutterWeather/models/ForecastData.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:geocoder/geocoder.dart';
+import 'package:http/http.dart' as http;
+import 'package:location/location.dart';
 
 void main() => runApp(MyApp());
 
@@ -26,13 +27,6 @@ class MyAppState extends State<MyApp> {
   String error;
 
   @override
-  void initState() {
-    super.initState();
-
-    loadWeather();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Weather App',
@@ -43,6 +37,15 @@ class MyAppState extends State<MyApp> {
           backgroundColor: Colors.blueGrey,
           appBar: AppBar(
             title: Text('Flutter Weather App'),
+            actions: <Widget>[
+              IconButton(
+                icon: new Icon(Icons.refresh),
+                tooltip: 'Refresh',
+                onPressed: loadWeather,
+                color: Colors.white,
+//                            iconSize: 32,
+              )
+            ],
           ),
           body: Center(
               child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
@@ -64,12 +67,7 @@ class MyAppState extends State<MyApp> {
                             valueColor:
                                 new AlwaysStoppedAnimation(Colors.white),
                           )
-                        : IconButton(
-                            icon: new Icon(Icons.refresh),
-                            tooltip: 'Refresh',
-                            onPressed: loadWeather,
-                            color: Colors.white,
-                          ),
+                        : null,
                   ),
                 ],
               ),
@@ -78,11 +76,11 @@ class MyAppState extends State<MyApp> {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  height: 200.0,
+                  height: 300.0,
                   child: forecastData != null
                       ? ListView.builder(
                           itemCount: forecastData.list.length,
-                          scrollDirection: Axis.horizontal,
+                          scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) => WeatherItem(
                               weather: forecastData.list.elementAt(index)))
                       : Container(),
@@ -91,6 +89,13 @@ class MyAppState extends State<MyApp> {
             )
           ]))),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    loadWeather();
   }
 
   loadWeather() async {
@@ -116,26 +121,28 @@ class MyAppState extends State<MyApp> {
     }
 
     if (location != null) {
-      final lat = location['latitude'];
-      final lon = location['longitude'];
+      final LAT = location['latitude'];
+      final LON = location['longitude'];
 
-      final APPID = "ff77c336b432de1511f52b6239626b92";
+      final API_KEY = "9cd9c35b8c859448b9db4d2ab38c7f56";
 
-      final weatherResponse = await http.get(
-          'https://api.openweathermap.org/data/2.5/weather?APPID=$APPID&lat=${lat.toString()}&lon=${lon.toString()}&units=imperial');
-      final forecastResponse = await http.get(
-          'https://api.openweathermap.org/data/2.5/forecast?APPID=$APPID&lat=${lat.toString()}&lon=${lon.toString()}&units=imperial');
+      final weatherResponse =
+          await http.get('https://api.darksky.net/forecast/$API_KEY/$LAT,$LON');
 
-      if (weatherResponse.statusCode == 200 &&
-          forecastResponse.statusCode == 200) {
-        return setState(() {
-          weatherData =
-              new WeatherData.fromJson(jsonDecode(weatherResponse.body));
-          forecastData =
-              new ForecastData.fromJson(jsonDecode(forecastResponse.body));
-          isLoading = false;
-        });
-      }
+      var something = jsonDecode(weatherResponse.body);
+
+      final coordinates = new Coordinates(LAT, LON);
+      var addresses =
+          await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      something['name'] = addresses.first;
+
+//      if (weatherResponse.statusCode == 200) {
+      return setState(() {
+        weatherData = new WeatherData.fromJson(something);
+        forecastData = new ForecastData.fromJson(something);
+        isLoading = false;
+      });
+//      }
 
       setState(() {
         isLoading = false;

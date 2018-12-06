@@ -1,6 +1,8 @@
+import 'package:geocoder/geocoder.dart';
+
 class WeatherData {
   final DateTime date;
-  final String name;
+  final Address name;
   final double temp;
   final String main;
   final String icon;
@@ -9,11 +11,13 @@ class WeatherData {
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
     return WeatherData(
-      date: new DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000, isUtc: false),
+      date: DateTime.fromMillisecondsSinceEpoch(
+          json['currently']['time'] * 1000,
+          isUtc: false),
       name: json['name'],
-      temp: json['main']['temp'].toDouble(),
-      main: json['weather'][0]['main'],
-      icon: json['weather'][0]['icon'],
+      temp: json['currently']['temperature'].toDouble(),
+      main: json['currently']['summary'],
+      icon: json['currently']['icon'],
     );
   }
 }
