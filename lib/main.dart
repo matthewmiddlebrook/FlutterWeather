@@ -34,7 +34,7 @@ class MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: Scaffold(
-          backgroundColor: Colors.blueGrey,
+//          backgroundColor: Colors.blueGrey,
           appBar: AppBar(
             title: Text('Flutter Weather App'),
             actions: <Widget>[
@@ -136,13 +136,13 @@ class MyAppState extends State<MyApp> {
           await Geocoder.local.findAddressesFromCoordinates(coordinates);
       something['name'] = addresses.first;
 
-//      if (weatherResponse.statusCode == 200) {
-      return setState(() {
-        weatherData = new WeatherData.fromJson(something);
-        forecastData = new ForecastData.fromJson(something);
-        isLoading = false;
-      });
-//      }
+      if (weatherResponse.statusCode == 200) {
+        return setState(() {
+          weatherData = new WeatherData.fromJson(something);
+          forecastData = new ForecastData.fromJson(something);
+          isLoading = false;
+        });
+      }
 
       setState(() {
         isLoading = false;

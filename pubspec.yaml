@@ -51,7 +51,16 @@ flutter:
   #  - images/a_dot_burr.jpeg
   #  - images/a_dot_ham.jpeg
   assets:
-  - assets/Sun.svg
+  - assets/clear-day.svg
+  - assets/clear-night.svg
+  - assets/rain.svg
+  - assets/snow.svg
+  - assets/sleet.svg
+  - assets/wind.svg
+  - assets/fog.svg
+  - assets/cloudy.svg
+  - assets/partly-cloudy-day.svg
+  - assets/partly-cloudy-night.svg
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

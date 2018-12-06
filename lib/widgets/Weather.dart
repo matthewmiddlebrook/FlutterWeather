@@ -10,21 +10,32 @@ class Weather extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(weather.name.locality + ", " + weather.name.adminArea,
-            style: TextStyle(color: Colors.white, fontSize: 16)),
-        Text(weather.main,
-            style: TextStyle(color: Colors.white, fontSize: 32.0)),
-        SvgPicture.asset("assets/Sun.svg",
-            color: Colors.white, width: 82, height: 82),
-        Text('${weather.temp.toString()}°F',
-            style: TextStyle(color: Colors.white, fontSize: 42)),
-        Text("Today is " + DateFormat.yMMMd().format(weather.date),
-            style: TextStyle(color: Colors.white)),
-        Text("Updated " + DateFormat.jm().format(weather.date),
-            style: TextStyle(color: Colors.white)),
-      ],
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(8.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(weather.name.locality + ", " + weather.name.adminArea,
+                    style: TextStyle(color: Colors.black, fontSize: 16)),
+                Text(weather.main,
+                    style: TextStyle(color: Colors.black, fontSize: 32.0)),
+                SvgPicture.asset("assets/${weather.icon}.svg",
+                    color: Colors.black, width: 82, height: 82),
+                Text('${weather.temp.toString()}°F',
+                    style: TextStyle(color: Colors.black, fontSize: 42)),
+                Text("Today is " + DateFormat.yMMMd().format(weather.date),
+                    style: TextStyle(color: Colors.black)),
+                Text("Updated " + DateFormat.jm().format(weather.date),
+                    style: TextStyle(color: Colors.black)),
+              ],
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
