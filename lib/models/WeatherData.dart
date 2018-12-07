@@ -6,10 +6,17 @@ class WeatherData {
   final double temp;
   final String main;
   final String icon;
+  final precipTable;
 
-  WeatherData({this.date, this.name, this.temp, this.main, this.icon});
+  WeatherData(
+      {this.date, this.name, this.temp, this.main, this.icon, this.precipTable});
 
   factory WeatherData.fromJson(Map<String, dynamic> json) {
+    List<double> data = [];
+    for (var a in json['minutely']['data']) {
+      data.add(a['precipIntensity']);
+    }
+
     return WeatherData(
       date: DateTime.fromMillisecondsSinceEpoch(
           json['currently']['time'] * 1000,
@@ -18,6 +25,7 @@ class WeatherData {
       temp: json['currently']['temperature'].toDouble(),
       main: json['currently']['summary'],
       icon: json['currently']['icon'],
+      precipTable: data,
     );
   }
 }

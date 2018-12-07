@@ -27,7 +27,8 @@ class ForecastData {
           tempH: e['temperatureHigh'].toDouble(),
           tempL: e['temperatureLow'].toDouble(),
           main: e['summary'],
-          icon: e['icon']);
+          icon: e['icon']
+      );
       list.add(w);
     }
 

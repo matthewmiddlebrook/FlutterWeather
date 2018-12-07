@@ -30,6 +30,8 @@ dependencies:
 
   flutter_svg: ^0.7.0+1
 
+  flutter_sparkline: ^0.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
