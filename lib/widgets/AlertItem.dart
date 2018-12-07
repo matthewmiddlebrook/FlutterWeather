@@ -10,7 +10,8 @@ class AlertItem extends StatefulWidget {
   AlertItemState createState() => new AlertItemState(weatherAlert);
 }
 
-class AlertItemState extends State<AlertItem> with TickerProviderStateMixin {
+class AlertItemState extends State<AlertItem>
+    with SingleTickerProviderStateMixin {
   final Alert weatherAlert;
   final textColor = Colors.white;
 
@@ -21,40 +22,60 @@ class AlertItemState extends State<AlertItem> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.red,
-      child: new Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          new GestureDetector(
-            onTap: () => setState(() {
-                  _showDesc = !_showDesc;
-                }),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: <Widget>[
-                  Text(weatherAlert.name,
-                      style: TextStyle(color: textColor, fontSize: 24)),
-                  Text(weatherAlert.severity.toUpperCase(),
-                      style: TextStyle(
-                          color: textColor.withOpacity(0.75), fontSize: 18)),
-                ],
+      color: Colors.red[800],
+      child: InkWell(
+        onTap: () =>
+            setState(() {
+              _showDesc = !_showDesc;
+            }),
+        child: new Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            GestureDetector(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Expanded(
+                      flex: 1,
+                      child: Icon(
+                        Icons.warning,
+                        color: textColor,
+                        size: 24,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 6,
+                      child: Column(
+                        children: <Widget>[
+                          Text(weatherAlert.name,
+                              style: TextStyle(color: textColor, fontSize: 24)),
+                          Text(weatherAlert.severity.toUpperCase(),
+                              style: TextStyle(
+                                  color: textColor.withOpacity(0.75),
+                                  fontSize: 18)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          new AnimatedSize(
-            duration: const Duration(milliseconds: 120),
-            child: _showDesc
-                ? Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(weatherAlert.description,
-                        style: TextStyle(color: textColor)),
-                  )
-                : Container(),
-            vsync: this,
-          )
-        ],
+            new AnimatedSize(
+              duration: const Duration(milliseconds: 240),
+              child: _showDesc
+                  ? Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Text(weatherAlert.description,
+                    style: TextStyle(color: textColor)),
+              )
+                  : Container(),
+              vsync: this,
+            )
+          ],
+        ),
       ),
     );
   }

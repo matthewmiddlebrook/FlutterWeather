@@ -34,8 +34,6 @@ class Weather extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(weather.name.locality + ", " + weather.name.adminArea,
-                    style: TextStyle(color: textColor, fontSize: 16)),
                 Text(weather.main,
                     style: TextStyle(color: textColor, fontSize: 32.0)),
                 SvgPicture.asset("assets/${weather.icon}.svg",
@@ -54,7 +52,7 @@ class Weather extends StatelessWidget {
                   lineGradient: new LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    colors: [Colors.purple[800], Colors.purple[200]],
+                    colors: [Colors.grey[100], Colors.grey[200]],
                   ),
                 ),
               ],

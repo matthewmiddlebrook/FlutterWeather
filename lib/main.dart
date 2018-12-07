@@ -22,6 +22,9 @@ class MyApp extends StatefulWidget {
 }
 
 class MyAppState extends State<MyApp> {
+  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+  new GlobalKey<RefreshIndicatorState>();
+
   bool isLoading = false;
   WeatherData weatherData;
   ForecastData forecastData;
@@ -32,70 +35,82 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Weather App',
+      title: 'Matthew Weather App',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
       home: Scaffold(
+        backgroundColor: Colors.black,
         appBar: AppBar(
-          title: Text('Flutter Weather App'),
+          backgroundColor: Colors.black,
+          title: Text(weatherData != null
+              ? weatherData.name.locality + ", " + weatherData.name.adminArea
+              : "Weather"),
           actions: <Widget>[
-            IconButton(
-              icon: new Icon(Icons.refresh),
-              tooltip: 'Refresh',
-              onPressed: loadWeather,
-              color: Colors.white,
-            )
+//            IconButton(
+//              icon: Icon(Icons.refresh),
+//              tooltip: 'Refresh',
+//              onPressed: loadWeather,
+//              color: Colors.white,
+//            )
           ],
         ),
-        body: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: alertData != null
-                      ? Column(
-                      children: List.generate(alertData.list.length, (index) {
-                        return AlertItem(
-                            weatherAlert: alertData.list.elementAt(index));
-                      })
-                  )
-                      : Container(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: weatherData != null
-                      ? Weather(weather: weatherData)
-                      : Container(),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: isLoading
-                      ? CircularProgressIndicator(
-                    strokeWidth: 2.0,
-                    valueColor: new AlwaysStoppedAnimation(Colors.white),
-                  )
-                      : null,
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: forecastData != null
-                    ? Column(
-                    children: List.generate(forecastData.list.length, (index) {
-                      return WeatherItem(
-                          weather: forecastData.list.elementAt(index));
-                    })
-                )
-                    : Container(),
+        body: RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: loadWeather,
+          child: ListView(
+            shrinkWrap: true,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: alertData != null
+                        ? Column(
+                      children: List.generate(
+                        alertData.list.length,
+                            (index) {
+                          return AlertItem(
+                              weatherAlert:
+                              alertData.list.elementAt(index));
+                        },
+                      ),
+                    )
+                        : Container(),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: weatherData != null
+                        ? Weather(weather: weatherData)
+                        : Container(),
+                  ),
+//                  isLoading
+//                      ? CircularProgressIndicator(
+//                          strokeWidth: 2.0,
+//                          valueColor: AlwaysStoppedAnimation(Colors.white),
+//                        )
+//                      : Container(),
+                ],
               ),
-            )
-          ],
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  child: forecastData != null
+                      ? Column(
+                    children: List.generate(
+                      forecastData.list.length,
+                          (index) {
+                        return WeatherItem(
+                            weather: forecastData.list.elementAt(index));
+                      },
+                    ),
+                  )
+                      : Container(),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -108,7 +123,7 @@ class MyAppState extends State<MyApp> {
     loadWeather();
   }
 
-  loadWeather() async {
+  Future<Null> loadWeather() async {
     setState(() {
       isLoading = true;
     });
@@ -124,7 +139,7 @@ class MyAppState extends State<MyApp> {
         error = 'Permission denied';
       } else if (e.code == 'PERMISSION_DENIED_NEVER_ASK') {
         error =
-            'Permission denied - please ask the user to enable it from the app settings';
+        'Permission denied - please ask the user to enable it from the app settings';
       }
 
       location = null;
@@ -137,13 +152,13 @@ class MyAppState extends State<MyApp> {
       final API_KEY = "9cd9c35b8c859448b9db4d2ab38c7f56";
 
       final weatherResponse =
-          await http.get('https://api.darksky.net/forecast/$API_KEY/$LAT,$LON');
+      await http.get('https://api.darksky.net/forecast/$API_KEY/$LAT,$LON');
 
       var data = jsonDecode(weatherResponse.body);
 
       final coordinates = new Coordinates(LAT, LON);
       var addresses =
-          await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      await Geocoder.local.findAddressesFromCoordinates(coordinates);
       data['name'] = addresses.first;
 
       if (weatherResponse.statusCode == 200) {

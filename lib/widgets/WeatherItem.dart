@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 
 class WeatherItem extends StatelessWidget {
   final DailyForecastData weather;
+
   final conditionColors = {
     'clear-day': Colors.amber,
     'clear-night': Colors.blueGrey,
@@ -13,11 +14,19 @@ class WeatherItem extends StatelessWidget {
     'sleet': Colors.blueGrey[200],
     'wind': Colors.green,
     'fog': Colors.grey[300],
-    'cloudy': Colors.grey,
-    'partly-cloudy-day': Color.lerp(Colors.blueGrey, Colors.amber, .75),
-    'partly-cloudy-night': Colors.blueGrey[600],
+    'cloudy': Colors.grey[700],
+    'partly-cloudy-day': Colors.grey,
+    'partly-cloudy-night': Colors.blueGrey[700],
   };
   final textColor = Colors.white;
+
+  Color conditionFontColor(String condition) {
+    var lightConditions = ['snow', 'sleet', 'fog'];
+    if (lightConditions.contains(condition)) {
+      return Colors.black;
+    }
+    return Colors.white;
+  }
 
   WeatherItem({Key key, @required this.weather}) : super(key: key);
 
@@ -32,7 +41,9 @@ class WeatherItem extends StatelessWidget {
             Expanded(
               flex: 1,
               child: SvgPicture.asset("assets/${weather.icon}.svg",
-                  color: textColor, width: 54, height: 54),
+                  color: conditionFontColor(weather.icon),
+                  width: 54,
+                  height: 54),
             ),
             Expanded(
               flex: 6,
@@ -44,10 +55,14 @@ class WeatherItem extends StatelessWidget {
                     Text(
                       DateFormat.E().format(weather.date),
                       textAlign: TextAlign.start,
-                      style: TextStyle(color: textColor, fontSize: 24),
+                      style: TextStyle(
+                          color: conditionFontColor(weather.icon),
+                          fontSize: 24),
                     ),
                     Text(weather.main,
-                        style: TextStyle(color: textColor, fontSize: 16)),
+                        style: TextStyle(
+                            color: conditionFontColor(weather.icon),
+                            fontSize: 16)),
                   ],
                 ),
               ),
@@ -58,9 +73,13 @@ class WeatherItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Text('${weather.tempH.round().toString()}°',
-                      style: TextStyle(color: textColor, fontSize: 24)),
+                      style: TextStyle(
+                          color: conditionFontColor(weather.icon),
+                          fontSize: 24)),
                   Text('${weather.tempL.round().toString()}°',
-                      style: TextStyle(color: textColor, fontSize: 24)),
+                      style: TextStyle(
+                          color: conditionFontColor(weather.icon),
+                          fontSize: 24)),
                 ],
               ),
             ),
