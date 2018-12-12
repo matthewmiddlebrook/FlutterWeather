@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class AlertItem extends StatefulWidget {
   final Alert weatherAlert;
 
-  const AlertItem({Key key, this.weatherAlert}) : super(key: key);
+  AlertItem({Key key, this.weatherAlert}) : super(key: key);
 
   @override
   AlertItemState createState() => new AlertItemState(weatherAlert);
@@ -52,10 +52,10 @@ class AlertItemState extends State<AlertItem>
                         children: <Widget>[
                           Text(weatherAlert.name,
                               style: TextStyle(color: textColor, fontSize: 24)),
-                          Text(weatherAlert.severity.toUpperCase(),
-                              style: TextStyle(
-                                  color: textColor.withOpacity(0.75),
-                                  fontSize: 18)),
+//                          Text(weatherAlert.severity.toUpperCase(),
+//                              style: TextStyle(
+//                                  color: textColor.withOpacity(0.75),
+//                                  fontSize: 18)),
                         ],
                       ),
                     ),

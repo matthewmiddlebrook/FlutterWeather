@@ -1,6 +1,5 @@
 import 'package:geocoder/geocoder.dart';
 
-
 class DailyForecastData {
   final DateTime date;
   final Address name;
@@ -9,7 +8,8 @@ class DailyForecastData {
   final String main;
   final String icon;
 
-  DailyForecastData({this.date, this.name, this.tempH, this.tempL, this.main, this.icon});
+  DailyForecastData(
+      {this.date, this.name, this.tempH, this.tempL, this.main, this.icon});
 }
 
 class ForecastData {
@@ -22,13 +22,13 @@ class ForecastData {
 
     for (dynamic e in json['daily']['data']) {
       DailyForecastData w = new DailyForecastData(
-          date: new DateTime.fromMillisecondsSinceEpoch(e['time'] * 1000, isUtc: false),
+          date: new DateTime.fromMillisecondsSinceEpoch(e['time'] * 1000,
+              isUtc: false),
           name: json['name'],
           tempH: e['temperatureHigh'].toDouble(),
           tempL: e['temperatureLow'].toDouble(),
           main: e['summary'],
-          icon: e['icon']
-      );
+          icon: e['icon']);
       list.add(w);
     }
 

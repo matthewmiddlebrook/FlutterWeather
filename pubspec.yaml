@@ -32,6 +32,8 @@ dependencies:
 
   flutter_sparkline: ^0.1.0
 
+  charts_flutter: ^0.5.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -63,6 +65,23 @@ flutter:
   - assets/cloudy.svg
   - assets/partly-cloudy-day.svg
   - assets/partly-cloudy-night.svg
+
+  - assets/all_icons/Compass-South.svg
+  - assets/all_icons/Wind.svg
+  - assets/all_icons/Umbrella.svg
+  - assets/all_icons/Shades.svg
+  - assets/all_icons/Sunrise.svg
+  - assets/all_icons/Sunset.svg
+
+  - assets/all_icons/Moon-First-Quarter.svg
+  - assets/all_icons/Moon-Full.svg
+  - assets/all_icons/Moon-Last-Quarter.svg
+  - assets/all_icons/Moon-New.svg
+  - assets/all_icons/Moon-Waning-Crescent.svg
+  - assets/all_icons/Moon-Waning-Gibbous.svg
+  - assets/all_icons/Moon-Waxing-Crescent.svg
+  - assets/all_icons/Moon-Waxing-Gibbous.svg
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -50,11 +50,10 @@ class WeatherItem extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.fromLTRB(16.0, 0, 0, 0),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
                       DateFormat.E().format(weather.date),
-                      textAlign: TextAlign.start,
                       style: TextStyle(
                           color: conditionFontColor(weather.icon),
                           fontSize: 24),
@@ -78,7 +77,8 @@ class WeatherItem extends StatelessWidget {
                           fontSize: 24)),
                   Text('${weather.tempL.round().toString()}°',
                       style: TextStyle(
-                          color: conditionFontColor(weather.icon),
+                          color: conditionFontColor(weather.icon).withOpacity(
+                              0.5),
                           fontSize: 24)),
                 ],
               ),

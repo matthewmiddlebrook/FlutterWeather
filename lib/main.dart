@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:FlutterWeather/models/AlertData.dart';
 import 'package:FlutterWeather/models/ForecastData.dart';
+import 'package:FlutterWeather/models/HourlyData.dart';
 import 'package:FlutterWeather/models/WeatherData.dart';
 import 'package:FlutterWeather/widgets/AlertItem.dart';
+import 'package:FlutterWeather/widgets/HourlyWidget.dart';
 import 'package:FlutterWeather/widgets/Weather.dart';
 import 'package:FlutterWeather/widgets/WeatherItem.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +31,8 @@ class MyAppState extends State<MyApp> {
   WeatherData weatherData;
   ForecastData forecastData;
   AlertData alertData;
+  HourlyData hourlyData;
+
   Location _location = new Location();
   String error;
 
@@ -47,12 +51,12 @@ class MyAppState extends State<MyApp> {
               ? weatherData.name.locality + ", " + weatherData.name.adminArea
               : "Weather"),
           actions: <Widget>[
-//            IconButton(
-//              icon: Icon(Icons.refresh),
-//              tooltip: 'Refresh',
-//              onPressed: loadWeather,
-//              color: Colors.white,
-//            )
+            IconButton(
+              icon: Icon(Icons.person),
+              tooltip: 'What to wear',
+              onPressed: () => {},
+              color: Colors.white,
+            )
           ],
         ),
         body: RefreshIndicator(
@@ -64,33 +68,50 @@ class MyAppState extends State<MyApp> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: alertData != null
-                        ? Column(
-                      children: List.generate(
-                        alertData.list.length,
-                            (index) {
-                          return AlertItem(
-                              weatherAlert:
-                              alertData.list.elementAt(index));
-                        },
-                      ),
-                    )
-                        : Container(),
-                  ),
+                  alertData != null && alertData.list.isNotEmpty
+                      ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: List.generate(
+                          alertData.list.length,
+                              (index) {
+                            return AlertItem(
+                                weatherAlert:
+                                alertData.list.elementAt(index));
+                          },
+                        ),
+                      ))
+                      : Container(),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: weatherData != null
                         ? Weather(weather: weatherData)
                         : Container(),
                   ),
-//                  isLoading
-//                      ? CircularProgressIndicator(
-//                          strokeWidth: 2.0,
-//                          valueColor: AlwaysStoppedAnimation(Colors.white),
-//                        )
-//                      : Container(),
+                  Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: new HourlyWidget(
+                        weather: hourlyData,
+                      )),
+                  Padding(
+                      padding: EdgeInsets.fromLTRB(24, 24, 24, 16),
+                      child: weatherData != null
+                          ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            "Next 7 Days",
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 24),
+                          ),
+                          Text(
+                            weatherData.dailySummary,
+                            style: TextStyle(
+                                color: Colors.white, fontSize: 16),
+                          ),
+                        ],
+                      )
+                          : Container()),
                 ],
               ),
               Padding(
@@ -166,6 +187,7 @@ class MyAppState extends State<MyApp> {
           weatherData = new WeatherData.fromJson(data);
           forecastData = new ForecastData.fromJson(data);
           alertData = new AlertData.fromJson(data);
+          hourlyData = new HourlyData.fromJson(data);
           isLoading = false;
         });
       }
