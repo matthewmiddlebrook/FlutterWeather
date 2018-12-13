@@ -17,6 +17,18 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart' as LocationManager;
 
+/*
+  This weather app was created by Matthew Middlebrook, a student at
+  Abilene Christian University for the final project in Mobile App Development.
+
+  This app was inspired by Weather Timeline for Android, an app no longer
+  supported by the developer. I hope to eventually implement every feature and
+  add new ones.
+
+  I apologize for the currently very sloppy code. I started with a tutorial that
+  made bad design choices. I will be working on this project over the coming
+  months to make it better since I understand Dart and Flutter much better now.
+ */
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: KEYS.googleMapsAPI);
 
 LatLng _location;
