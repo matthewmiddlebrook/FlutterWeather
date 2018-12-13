@@ -25,10 +25,27 @@ import 'package:location/location.dart' as LocationManager;
   supported by the developer. I hope to eventually implement every feature and
   add new ones.
 
+  Currently the app is 100% functioning and usable.
+
   I apologize for the currently very sloppy code. I started with a tutorial that
   made bad design choices. I will be working on this project over the coming
   months to make it better since I understand Dart and Flutter much better now.
- */
+
+  ** THINGS TO DO SOMEDAY THAT MAKE THE APP EVEN BETTER **
+  * TODO: Cleanup code duplication of theming
+  * TODO: Figure out what to do with the models/data - keep/remove/improve?
+  * TODO: High/low temp graph over 48 hours and/or 7 days
+  * TODO: Fix moon wrapping and icon
+  * TODO: Make precip graph better, more readable, hide when no chance
+  * TODO: Make days tappable with hourly forecast
+  * TODO: Use "extend=hourly" param to get extended hourly forecast per each day
+  * TODO: Use HTTP compression to use less data when getting extended hourly
+  * TODO: Add location favoriting/saving
+  * TODO: Show what to wear/need umbrella based on weather
+  * TODO: Improve readability of alert cards/add new lines
+  * TODO: Don't require Location permission to use app
+*/
+
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: KEYS.googleMapsAPI);
 
 LatLng _location;
@@ -133,15 +150,15 @@ class MyAppState extends State<MyApp> {
             : "Weather"),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.my_location),
-            tooltip: 'Search',
-            onPressed: setLocationToCurrent,
-            color: Colors.white,
-          ),
-          IconButton(
             icon: Icon(Icons.search),
             tooltip: 'Search',
             onPressed: _handlePressButton,
+            color: Colors.white,
+          ),
+          IconButton(
+            icon: Icon(Icons.my_location),
+            tooltip: 'Search',
+            onPressed: setLocationToCurrent,
             color: Colors.white,
           ),
         ],
