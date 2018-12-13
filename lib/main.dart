@@ -7,6 +7,7 @@ import 'package:FlutterWeather/models/HourlyData.dart';
 import 'package:FlutterWeather/models/WeatherData.dart';
 import 'package:FlutterWeather/widgets/AlertItem.dart';
 import 'package:FlutterWeather/widgets/HourlyWidget.dart';
+import 'package:FlutterWeather/widgets/TempGraph.dart';
 import 'package:FlutterWeather/widgets/Weather.dart';
 import 'package:FlutterWeather/widgets/WeatherItem.dart';
 import 'package:flutter/material.dart';
@@ -223,6 +224,8 @@ class MyAppState extends State<MyApp> {
                           style: TextStyle(
                               color: Colors.white, fontSize: 16),
                         ),
+                        new TempGraph.withSampleData(
+                            weather: weatherData, textColor: Colors.white),
                       ],
                     )
                         : Container()),

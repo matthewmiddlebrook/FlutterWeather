@@ -3,11 +3,11 @@ import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 
 /// Sample linear data type.
-class TempDataPoint {
+class PrecipDataPoint {
   final DateTime time;
-  final double temp;
+  final double precip;
 
-  TempDataPoint(this.time, this.temp);
+  PrecipDataPoint(this.time, this.precip);
 }
 
 class PrecipGraph extends StatelessWidget {
@@ -52,29 +52,29 @@ class PrecipGraph extends StatelessWidget {
   }
 
   /// Create one series with sample hard coded data.
-  static List<charts.Series<TempDataPoint, DateTime>> _createSampleData(
+  static List<charts.Series<PrecipDataPoint, DateTime>> _createSampleData(
       WeatherData weather, Color textColor) {
-    List<TempDataPoint> highData = [];
+    List<PrecipDataPoint> highData = [];
 
     for (dynamic e in weather.data['minutely']['data']) {
       DateTime dt =
           DateTime.fromMillisecondsSinceEpoch(e['time'] * 1000, isUtc: false);
-      highData.add(TempDataPoint(
+      highData.add(PrecipDataPoint(
           dt,
           e['precipProbability'] != null
               ? e['precipProbability'].toDouble() *
               e['precipIntensity'].toDouble() *
-              2
+              10
               : 0));
     }
 
     return [
-      new charts.Series<TempDataPoint, DateTime>(
-        id: 'High',
+      new charts.Series<PrecipDataPoint, DateTime>(
+        id: 'Precip',
         colorFn: (_, __) => charts.Color(
             r: textColor.red, g: textColor.green, b: textColor.blue),
-        domainFn: (TempDataPoint td, _) => td.time,
-        measureFn: (TempDataPoint td, _) => td.temp,
+        domainFn: (PrecipDataPoint td, _) => td.time,
+        measureFn: (PrecipDataPoint td, _) => td.precip,
         data: highData,
       ),
     ];
