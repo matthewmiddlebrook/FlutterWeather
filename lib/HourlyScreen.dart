@@ -81,7 +81,7 @@ class HourlyItem extends StatelessWidget {
                   height: 54),
             ),
             Expanded(
-              flex: 6,
+              flex: 5,
               child: Container(
                 padding: EdgeInsets.fromLTRB(16.0, 0, 0, 0),
                 child: Column(
@@ -102,7 +102,7 @@ class HourlyItem extends StatelessWidget {
               ),
             ),
             Expanded(
-              flex: 1,
+              flex: 2,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -110,11 +110,13 @@ class HourlyItem extends StatelessWidget {
                       style: TextStyle(
                           color: conditionFontColor(hourlyForecastData.icon),
                           fontSize: 24)),
-                  Text('${hourlyForecastData.tempFeel.round().toString()}°',
+                  Text('${hourlyForecastData
+                      .precipProbability}% Rain\nFeel ${hourlyForecastData
+                      .tempFeel.round().toString()}°',
                       style: TextStyle(
                           color: conditionFontColor(hourlyForecastData.icon)
                               .withOpacity(0.5),
-                          fontSize: 24)),
+                          fontSize: 16)),
                 ],
               ),
             ),

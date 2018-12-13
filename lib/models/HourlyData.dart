@@ -4,9 +4,10 @@ class HourlyForecastData {
   final double tempFeel;
   final String summary;
   final String icon;
+  final int precipProbability;
 
   HourlyForecastData(
-      {this.date, this.temp, this.tempFeel, this.summary, this.icon});
+      {this.date, this.temp, this.tempFeel, this.summary, this.icon, this.precipProbability});
 }
 
 class HourlyData {
@@ -26,7 +27,9 @@ class HourlyData {
           temp: e['temperature'].toDouble(),
           tempFeel: e['apparentTemperature'].toDouble(),
           summary: e['summary'],
-          icon: e['icon']);
+        icon: e['icon'],
+        precipProbability: (e['precipProbability'] * 100).toInt(),
+      );
       list.add(w);
     }
 

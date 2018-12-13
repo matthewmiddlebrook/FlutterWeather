@@ -25,7 +25,7 @@ class WeatherData {
   final String windBearing;
   final double windAngle;
 
-  final String moonPhase;
+  final List<String> moonPhase;
   final String moonPhasePic;
 
   final DateTime sunrise;
@@ -132,7 +132,8 @@ class WeatherData {
       windBearing: windBearingName(json['currently']['windBearing'].toDouble()),
       windAngle: json['currently']['windBearing'].toDouble(),
 
-      moonPhase: moonPhaseName(json['daily']['data'][0]['moonPhase']),
+      moonPhase: moonPhaseName(json['daily']['data'][0]['moonPhase']).split(
+          '-'),
       moonPhasePic: moonPhaseName(json['daily']['data'][0]['moonPhase']),
 
       sunrise: DateTime.fromMillisecondsSinceEpoch(

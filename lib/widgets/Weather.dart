@@ -89,6 +89,13 @@ class WeatherInfoTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String moon1 = weather.moonPhase.elementAt(0);
+    String moon2 = "Moon";
+
+    if (weather.moonPhase.length == 2) {
+      moon2 = weather.moonPhase.elementAt(1);
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -146,9 +153,8 @@ class WeatherInfoTable extends StatelessWidget {
                 color: textColor,
                 width: 48,
                 height: 48),
-            Text(weather.moonPhase,
-                style: TextStyle(color: textColor, fontSize: 14)),
-            Text("Moon",
+            Text(moon1, style: TextStyle(color: textColor, fontSize: 14)),
+            Text(moon2,
                 style:
                 TextStyle(color: textColor.withOpacity(.5), fontSize: 14)),
           ],
