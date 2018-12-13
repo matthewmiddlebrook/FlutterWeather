@@ -15,6 +15,12 @@ class AlertItemState extends State<AlertItem>
   final Alert weatherAlert;
   final textColor = Colors.white;
 
+  final alertColors = {
+    'advisory': Colors.grey[600],
+    'watch': Colors.orange[800],
+    'warning': Colors.red[800],
+  };
+
   bool _showDesc = false;
 
   AlertItemState(this.weatherAlert);
@@ -22,7 +28,7 @@ class AlertItemState extends State<AlertItem>
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.red[800],
+      color: alertColors[weatherAlert.severity],
       child: InkWell(
         onTap: () =>
             setState(() {

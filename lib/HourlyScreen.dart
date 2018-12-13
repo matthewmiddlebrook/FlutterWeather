@@ -17,25 +17,21 @@ class HourlyScreen extends StatelessWidget {
         title: Text("Next 48 Hours"),
       ),
       body: ListView(
+        padding: const EdgeInsets.all(8.0),
         shrinkWrap: true,
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              child: hourlyData != null
-                  ? Column(
-                      children: List.generate(
-                        hourlyData.list.length,
-                        (index) {
-                          return HourlyItem(
-                              hourlyForecastData:
-                                  hourlyData.list.elementAt(index));
-                        },
-                      ),
-                    )
-                  : Container(),
+          hourlyData != null
+              ? Column(
+            children: List.generate(
+              hourlyData.list.length,
+                  (index) {
+                return HourlyItem(
+                    hourlyForecastData:
+                    hourlyData.list.elementAt(index));
+              },
             ),
           )
+              : Container()
         ],
       ),
     );

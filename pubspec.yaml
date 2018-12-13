@@ -34,6 +34,10 @@ dependencies:
 
   charts_flutter: ^0.5.0
 
+  flutter_google_places: ^0.1.4+1
+
+  google_maps_flutter: ^0.0.3
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
