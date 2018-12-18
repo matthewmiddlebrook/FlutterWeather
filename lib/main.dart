@@ -54,7 +54,6 @@ void main() {
   runApp(MaterialApp(
     title: "Matthew Weather App",
     home: MyApp(),
-    debugShowCheckedModeBanner: false,
     theme: ThemeData(
       primarySwatch: Colors.blueGrey,
     ),
@@ -134,9 +133,7 @@ class MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: homeScaffoldKey,
-      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.black,
         title: Text(weatherData != null
             ? weatherData.name.locality + ", " + weatherData.name.adminArea
             : "Weather"),
@@ -145,101 +142,84 @@ class MyAppState extends State<MyApp> {
             icon: Icon(Icons.search),
             tooltip: 'Search',
             onPressed: _handlePressButton,
-            color: Colors.white,
           ),
           IconButton(
             icon: Icon(Icons.my_location),
             tooltip: 'Current Location',
             onPressed: setLocationToCurrent,
-            color: Colors.white,
           ),
         ],
       ),
-      body: RefreshIndicator(
-        key: _refreshIndicatorKey,
-        onRefresh: loadWeather,
-        child: ListView(
-          shrinkWrap: true,
-          children: <Widget>[
-            weatherData == null
-                ? Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Text(
-                  "This is a weather app.\n"
+      body: homeScreen(),
+    );
+  }
+
+  Widget homeScreen() {
+    return RefreshIndicator(
+      key: _refreshIndicatorKey,
+      onRefresh: loadWeather,
+      child: ListView(
+        shrinkWrap: true,
+        padding: EdgeInsets.all(8.0),
+        children: <Widget>[
+          weatherData == null ? Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+                "This is a weather app.\n"
                       "Location services are required\n"
                       "for this app to function.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.white, fontSize: 24)),
-            )
-                : Container(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                alertData != null && alertData.list.isNotEmpty
-                    ? Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      children: List.generate(
-                        alertData.list.length,
-                            (index) {
-                          return AlertItem(
-                              weatherAlert:
-                              alertData.list.elementAt(index));
-                        },
-                      ),
-                    ))
-                    : Container(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: weatherData != null
-                      ? Weather(weather: weatherData)
-                      : Container(),
-                ),
-                Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: new HourlyWidget(
-                      weather: hourlyData,
-                    )),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(24, 24, 24, 16),
-                    child: weatherData != null
-                        ? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          "Next 7 Days",
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 24),
-                        ),
-                        Text(
-                          weatherData.dailySummary,
-                          style: TextStyle(
-                              color: Colors.white, fontSize: 16),
-                        ),
-                        new TempGraph.withSampleData(
-                            weather: weatherData,
-                            textColor: Colors.white),
-                      ],
-                    )
-                        : Container()),
-              ],
-            ),
-            Padding(
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 24)),
+          )
+              : Container(),
+          alertData != null && alertData.list.isNotEmpty
+              ? Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                child: forecastData != null
-                    ? Column(
-                  children: List.generate(
-                    forecastData.list.length,
-                        (index) {
-                      return WeatherItem(
-                          weather: forecastData.list.elementAt(index));
-                    },
-                  ),
-                )
-                    : Container(),
-              ),
-            )
+              child: Column(
+                children: List.generate(
+                  alertData.list.length,
+                      (index) {
+                    return AlertItem(
+                        weatherAlert: alertData.list.elementAt(index));
+                  },
+                ),
+              ))
+              : Container(),
+          Weather(weather: weatherData),
+          HourlyWidget(
+            weather: hourlyData,
+          ),
+          tempGraph(),
+          Column(
+            children: List.generate(
+              forecastData.list.length,
+                  (index) {
+                return WeatherItem(weather: forecastData.list.elementAt(index));
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget tempGraph() {
+    return Card(
+      child: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              "Next 7 Days",
+              style: TextStyle(fontSize: 24),
+            ),
+            Text(
+              weatherData.dailySummary,
+              style: TextStyle(fontSize: 16),
+            ),
+            TempGraph.withSampleData(
+                weather: weatherData, textColor: Colors.black),
           ],
         ),
       ),
@@ -280,8 +260,6 @@ class MyAppState extends State<MyApp> {
           forecastData = new ForecastData.fromJson(data);
           alertData = new AlertData.fromJson(data);
           hourlyData = new HourlyData.fromJson(data);
-
-          return setState(() => isLoading = false);
         }
 
         setState(() => isLoading = false);
