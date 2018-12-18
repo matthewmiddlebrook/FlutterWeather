@@ -48,7 +48,6 @@ import 'package:location/location.dart' as LocationManager;
 */
 
 GoogleMapsPlaces _places = GoogleMapsPlaces(apiKey: KEYS.googleMapsAPI);
-
 LatLng _location;
 
 void main() {
@@ -64,9 +63,7 @@ void main() {
 
 class MyApp extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return new MyAppState();
-  }
+  State<StatefulWidget> createState() => new MyAppState();
 }
 
 class MyAppState extends State<MyApp> {
@@ -82,15 +79,6 @@ class MyAppState extends State<MyApp> {
   ForecastData forecastData;
   AlertData alertData;
   HourlyData hourlyData;
-
-//  LocationManager.Location _location = new LocationManager.Location();
-  String error;
-
-  void onError(PlacesAutocompleteResponse response) {
-    homeScaffoldKey.currentState.showSnackBar(
-      SnackBar(content: Text(response.errorMessage)),
-    );
-  }
 
   Future<LatLng> getUserLocation() async {
     var currentLocation = <String, double>{};
@@ -126,7 +114,10 @@ class MyAppState extends State<MyApp> {
       Prediction p = await PlacesAutocomplete.show(
         context: context,
         apiKey: KEYS.googleMapsAPI,
-        onError: onError,
+        onError: (PlacesAutocompleteResponse response) =>
+            homeScaffoldKey
+                .currentState
+                .showSnackBar(SnackBar(content: Text(response.errorMessage))),
         mode: Mode.overlay,
         language: "en",
         hint: "Search for a location",
@@ -158,7 +149,7 @@ class MyAppState extends State<MyApp> {
           ),
           IconButton(
             icon: Icon(Icons.my_location),
-            tooltip: 'Search',
+            tooltip: 'Current Location',
             onPressed: setLocationToCurrent,
             color: Colors.white,
           ),
@@ -174,10 +165,11 @@ class MyAppState extends State<MyApp> {
                 ? Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                  "This is a weather app.\nLocation services are required\nfor this app to function.",
+                  "This is a weather app.\n"
+                      "Location services are required\n"
+                      "for this app to function.",
                   textAlign: TextAlign.center,
-                  style:
-                  TextStyle(color: Colors.white, fontSize: 24)),
+                  style: TextStyle(color: Colors.white, fontSize: 24)),
             )
                 : Container(),
             Column(
@@ -225,7 +217,8 @@ class MyAppState extends State<MyApp> {
                               color: Colors.white, fontSize: 16),
                         ),
                         new TempGraph.withSampleData(
-                            weather: weatherData, textColor: Colors.white),
+                            weather: weatherData,
+                            textColor: Colors.white),
                       ],
                     )
                         : Container()),
@@ -257,17 +250,13 @@ class MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    loadWeather();
-  }
-
-  Future<Null> loadWeather() async {
-    setState(() {
-      isLoading = true;
-    });
-
     if (_location == null) {
       setLocationToCurrent();
     }
+  }
+
+  Future<void> loadWeather() async {
+    setState(() => isLoading = true);
 
     if (_location != null) {
       final LAT = _location.latitude;
@@ -275,31 +264,30 @@ class MyAppState extends State<MyApp> {
 
       final API_KEY = KEYS.darkSkyAPI;
 
-      final weatherResponse =
-      await http.get('https://api.darksky.net/forecast/$API_KEY/$LAT,$LON');
+      final SITE = 'https://api.darksky.net/forecast';
 
-      var data = jsonDecode(weatherResponse.body);
+      http.get('$SITE/$API_KEY/$LAT,$LON').then((http.Response value) async {
+        var data = jsonDecode(value.body);
 
-      final coordinates = new Coordinates(LAT, LON);
-      var addresses =
-      await Geocoder.local.findAddressesFromCoordinates(coordinates);
-      data['name'] = addresses.first;
+        final coordinates = new Coordinates(LAT, LON);
+        var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
+        // Adds name of the location to data, since DarkSky doesn't
+        data['name'] = addresses.first;
 
-      if (weatherResponse.statusCode == 200) {
-        return setState(() {
+        if (value.statusCode == 200) {
           weatherData = new WeatherData.fromJson(data);
           forecastData = new ForecastData.fromJson(data);
           alertData = new AlertData.fromJson(data);
           hourlyData = new HourlyData.fromJson(data);
-          isLoading = false;
-        });
-      }
 
-      setState(() {
-        isLoading = false;
+          return setState(() => isLoading = false);
+        }
+
+        setState(() => isLoading = false);
       });
     } else {
-      print("NULL");
+      print("Something didn't work right...");
     }
   }
 }
